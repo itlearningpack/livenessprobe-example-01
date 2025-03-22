@@ -14,11 +14,12 @@ kind: Pod
 metadata:
  name: health2
  labels:
-  app: v1.0.0
+  app: v1
 spec:
  containers:
-  - name: httpget
+  - name: health2
     image: registry.k8s.io/e2e-test-images/agnhost:2.40
+    imagePullPolicy: IfNotPresent
     args:
      - liveness
     livenessProbe:
@@ -26,7 +27,7 @@ spec:
       path: /healthz
       port: 8080
       httpHeaders:
-       - name: Custome-Header
+       - name: Custom-Header
          value: Awesome
      initialDelaySeconds: 10
      periodSeconds: 5
