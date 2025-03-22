@@ -46,6 +46,12 @@ http.HandleFunc("/healthz", func(w http.ResponseWriter, r *http.Request) {
     }
 })
 ```
+The kubelet starts performing health checks 3 seconds after the container starts. So the first couple of health checks will succeed. But after 10 seconds, the health checks will fail, and the kubelet will kill and restart the container.
+
+To try the HTTP liveness check, create a Pod:
+```
+kubectl apply -f https://github.com/itlearningpack/livenessprobe-example-02-kubernetes/blob/main/health2.yaml
+```
 After 10 seconds, view Pod events to verify that liveness probes have failed and the container has been restarted:
 ```
 kubectl describe pod health2
