@@ -1,12 +1,8 @@
-# Define a Liveness Command and HTTP Request
+# Define a liveness HTTP request 
 
-## Liveness Command
+Another kind of liveness probe uses an HTTP GET request. Here is the configuration file for a Pod that runs a container based on the registry.k8s.io/e2e-test-images/agnhost image.
 
-Many applications running for long periods of time eventually transition to broken states and cannot recover except by being restarted. Kubernetes provides liveness probes to detect and remedy such situations.
-
-In this exercise, you create a Pod that runs a container based on the `registry.k8s.io/busybox:1.27.2` image. Here is the configuration file for the Pod:
-
-### Pod Configuration for Liveness Command
+### Pod Configuration for Liveness HTTP-GET
 
 ```yaml
 apiVersion: v1
@@ -35,7 +31,7 @@ spec:
 In the configuration file, you can see that the Pod has a single container. The periodSeconds field specifies that the kubelet should perform a liveness probe every 3 seconds. The initialDelaySeconds field tells the kubelet that it should wait 3 seconds before performing the first probe. To perform a probe, the kubelet sends an HTTP GET request to the server that is running in the container and listening on port 8080. If the handler for the server's /healthz path returns a success code, the kubelet considers the container to be alive and healthy. If the handler returns a failure code, the kubelet kills the container and restarts it.
 Any code greater than or equal to 200 and less than 400 indicates success. Any other code indicates failure.
 
-You can see the source code for the server in server.go.
+You can see the source code for the server in [server.go](https://github.com/kubernetes/kubernetes/blob/master/test/images/agnhost/liveness/server.go).
 
 For the first 10 seconds that the container is alive, the /healthz handler returns a status of 200. After that, the handler returns a status of 500.
 ```go
